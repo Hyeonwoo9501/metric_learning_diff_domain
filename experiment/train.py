@@ -1,6 +1,6 @@
 from __future__ import print_function
 import os
-# from data import *
+from data import *
 import torch
 from torch.utils import data
 import torch.nn.functional as F
@@ -36,8 +36,8 @@ if __name__ == '__main__':
                                   shuffle=True,
                                   num_workers=opt.num_workers)
 
-    identity_list = get_lfw_list(opt.lfw_test_list)
-    img_paths = [os.path.join(opt.lfw_root, each) for each in identity_list]
+#    identity_list = get_lfw_list(opt.lfw_test_list)
+#    img_paths = [os.path.join(opt.lfw_root, each) for each in identity_list]
 
     print('{} train iters per epoch:'.format(len(trainloader)))
 
@@ -114,7 +114,7 @@ if __name__ == '__main__':
         if i % opt.save_interval == 0 or i == opt.max_epoch:
             save_model(model, opt.checkpoints_path, opt.backbone, i)
 
-        model.eval()
-        acc = lfw_test(model, img_paths, identity_list, opt.lfw_test_list, opt.test_batch_size)
-        if opt.display:
-            visualizer.display_current_results(iters, acc, name='test_acc')
+        #model.eval()
+        #acc = lfw_test(model, img_paths, identity_list, opt.lfw_test_list, opt.test_batch_size)
+        #if opt.display:
+        #    visualizer.display_current_results(iters, acc, name='test_acc')

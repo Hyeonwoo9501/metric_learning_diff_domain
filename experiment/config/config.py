@@ -2,7 +2,7 @@ class Config(object):
     env = 'default'
     backbone = 'resnet18'
     classify = 'softmax'
-    num_classes = 13938
+    num_classes = 16142
     metric = 'arc_margin'
     easy_margin = False
     use_se = False
@@ -11,7 +11,7 @@ class Config(object):
     display = False
     finetune = False
 
-    train_root = '/data/Datasets/webface/CASIA-maxpy-clean-crop-144/'
+    train_root = '../../experiment_dataset/data/Training/label_data/TL/Images/dataset'
     train_list = '/data/Datasets/webface/train_data_13938.txt'
     val_list = '/data/Datasets/webface/val_data_13938.txt'
 

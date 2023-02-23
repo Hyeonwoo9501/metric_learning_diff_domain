@@ -7,6 +7,7 @@ from torchvision import transforms as T
 import torchvision
 import cv2
 import sys
+import re
 
 
 class Dataset(data.Dataset):
@@ -15,11 +16,22 @@ class Dataset(data.Dataset):
         self.phase = phase
         self.input_shape = input_shape
 
-        with open(os.path.join(data_list_file), 'r') as fd:
-            imgs = fd.readlines()
+        #with open(os.path.join(data_list_file), 'r') as fd:
+        #    imgs = fd.readlines()
 
-        imgs = [os.path.join(root, img[:-1]) for img in imgs]
-        self.imgs = np.random.permutation(imgs)
+        img_list = os.listdir(root)
+        imgs = []
+        labels = []
+
+        for img in img_list:
+            imgs.append(os.path.join(root, img))
+            labels.append(re.split('[.,_]', img)[0])
+
+        
+
+        # imgs = [os.path.join(root, img) for img in img_list]
+        self.imgs = imgs
+        self.labels = labels
 
         # normalize = T.Normalize(mean=[0.5, 0.5, 0.5],
         #                         std=[0.5, 0.5, 0.5])
@@ -28,7 +40,8 @@ class Dataset(data.Dataset):
 
         if self.phase == 'train':
             self.transforms = T.Compose([
-                T.RandomCrop(self.input_shape[1:]),
+                T.Resize(self.input_shape[1:]),
+                #T.RandomCrop(self.input_shape[1:]),
                 T.RandomHorizontalFlip(),
                 T.ToTensor(),
                 normalize
@@ -42,12 +55,13 @@ class Dataset(data.Dataset):
 
     def __getitem__(self, index):
         sample = self.imgs[index]
-        splits = sample.split()
-        img_path = splits[0]
-        data = Image.open(img_path)
+        label = self.labels[index]
+        # splits = sample.split()
+        # img_path = splits[0]
+        data = Image.open(sample)
         data = data.convert('L')
         data = self.transforms(data)
-        label = np.int32(splits[1])
+        label = np.int32(label)
         return data.float(), label
 
     def __len__(self):
